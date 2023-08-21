@@ -11,12 +11,19 @@ final class CharacterCell: UICollectionViewCell {
 
     struct Model {
         let title: String
-        let image: UIImage?
+        let image: String?
+        let id: Int
+        let episode: [String]?
+        let status: String?
+        let species: String?
+        let typeCreated: String?
+        let gender: String?
+        let namePlanet: String?
+        let urlLocation: String?
     }
 
     private let label = UILabel()
     private let imageView = UIImageView()
-
     override init(frame: CGRect) {
         super.init(frame: frame)
         configCell()
@@ -28,7 +35,8 @@ final class CharacterCell: UICollectionViewCell {
 
     public func fillCell(model: CharacterCell.Model) {
         label.text = model.title
-        imageView.image = model.image
+        guard let imageString = model.image, let url = URL(string: imageString) else { return }
+        imageView.load(url: url)
     }
 
     private func configCell() {
@@ -38,6 +46,7 @@ final class CharacterCell: UICollectionViewCell {
 
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.layer.cornerRadius = 10
+        imageView.clipsToBounds = true
         imageView.backgroundColor = .white
 
         NSLayoutConstraint.activate([

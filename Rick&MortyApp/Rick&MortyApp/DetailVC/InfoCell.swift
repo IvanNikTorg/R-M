@@ -10,18 +10,19 @@ import UIKit
 final class InfoCell: UITableViewCell {
 
     struct Model {
-        let speciesTitle: String
-        let typeTitle: String
-        let genderTitle: String
+        var speciesTitle: String
+        var typeTitle: String
+        var genderTitle: String
 
-        let species: String
-        let type: String?
-        let gender: String
+        var species: String
+        var type: String?
+        var gender: String
     }
 
     private let speciesRow = InfoRow()
     private let typeRow = InfoRow()
     private let genderRow = InfoRow()
+    private let backView = UIView()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: "infoCell")
@@ -40,6 +41,19 @@ final class InfoCell: UITableViewCell {
 
     private func configCell() {
 
+        contentView.addSubview(backView)
+        backView.backgroundColor = UIColor(red: 0.15, green: 0.16, blue: 0.22, alpha: 1)
+        backView.layer.cornerRadius = 16
+
+        backView.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            backView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            backView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            backView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 24),
+            backView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -24)
+        ])
+
         let stack = UIStackView()
         stack.axis = .vertical
         stack.spacing = 16
@@ -49,17 +63,15 @@ final class InfoCell: UITableViewCell {
         stack.addArrangedSubview(genderRow)
 
         contentView.addSubview(stack)
-        contentView.backgroundColor = UIColor(red: 0.15, green: 0.16, blue: 0.22, alpha: 1)
-        contentView.layer.cornerRadius = 16
         self.backgroundColor = .clear
-
+        contentView.backgroundColor = .clear
         stack.translatesAutoresizingMaskIntoConstraints = false
 
         NSLayoutConstraint.activate([
-            stack.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
-            stack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
-            stack.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16),
-            stack.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16)
+            stack.topAnchor.constraint(equalTo: backView.topAnchor, constant: 16),
+            stack.bottomAnchor.constraint(equalTo: backView.bottomAnchor, constant: -16),
+            stack.leftAnchor.constraint(equalTo: backView.leftAnchor, constant: 16),
+            stack.rightAnchor.constraint(equalTo: backView.rightAnchor, constant: -16)
         ])
     }
 

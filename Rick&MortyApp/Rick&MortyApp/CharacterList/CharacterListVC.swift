@@ -11,20 +11,41 @@ class CharacterListVC: UIViewController {
 
     private var collectionView: UICollectionView?
     private lazy var titleLabel = UILabel()
-    var dataSource: [CharacterCell.Model] = [CharacterCell.Model(title: "Rick 1", image: nil),
-                                             CharacterCell.Model(title: "Rick 2", image: nil)]
+    var dataSource = [CharacterCell.Model]()
+    override var preferredStatusBarStyle: UIStatusBarStyle { .lightContent }
+    private var netQuest = NetworkService()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        
+        netQuest.getUrlList {[weak self] urlListData in
+            self?.netQuest.getCharacterList(urlString: urlListData?.characters ?? "nil")
+            {[weak self] resChar in
+                if resChar?.results != nil, let persons = resChar?.results {
+                    self?.dataSource = persons.map {
+                        CharacterCell.Model(title: $0.name ?? "None", image: $0.image, id: $0.id ?? 0,
+                                            episode: $0.episode, status: $0.status ?? "None",
+                                            species: $0.species ?? "None", typeCreated: $0.typeCreated ?? "None",
+                                            gender: $0.gender ?? "None", namePlanet: $0.origin.name ?? "None",
+                                            urlLocation: $0.origin.url ?? "None")
+                    }
+                    DispatchQueue.main.async {
+                        self?.collectionView?.reloadData()
+                    }
+                }
+            }
+        }
+
     }
 
+
+
+
     private func setupView() {
-
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         view.backgroundColor = UIColor(red: 0.02, green: 0.05, blue: 0.12, alpha: 1)
-        view.addSubview(titleLabel)
 
+        view.addSubview(titleLabel)
         titleLabel.textColor = .white
         titleLabel.font = .systemFont(ofSize: 28, weight: .bold)
         titleLabel.attributedText = NSMutableAttributedString(string: "Characters", attributes: [NSAttributedString.Key.kern: 0.36])
@@ -72,8 +93,8 @@ extension CharacterListVC: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
-       guard let charCell = collectionView.dequeueReusableCell(withReuseIdentifier: "characterCell",
-                                                          for: indexPath) as? CharacterCell
+        guard let charCell = collectionView.dequeueReusableCell(withReuseIdentifier: "characterCell",
+                                                                for: indexPath) as? CharacterCell
         else { return UICollectionViewCell() }
         charCell.fillCell(model: dataSource[indexPath.row])
         return charCell
@@ -82,6 +103,19 @@ extension CharacterListVC: UICollectionViewDataSource {
 
 extension CharacterListVC: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("You selected cell #\(indexPath.item)!")
+        
+        let detailVC = DetailVC()
+        detailVC.fillInfoCellDataSource(species: dataSource[indexPath.item].species,
+                                        type: dataSource[indexPath.item].typeCreated,
+                                        gender: dataSource[indexPath.item].gender)
+        detailVC.fillDataSourceOrigin(namePlanet: dataSource[indexPath.item].namePlanet,
+                                      avatarImage: nil, bodyType: dataSource[indexPath.item].urlLocation,
+                                      urlPlanet: dataSource[indexPath.item].urlLocation)
+        detailVC.fillAvatarDataSource(nameCharacter: dataSource[indexPath.item].title,
+                                      avatarImage: dataSource[indexPath.item].image,
+                                      rip: dataSource[indexPath.item].status ?? "None")
+        detailVC.fillEpisodeDataSource(urlArray: dataSource[indexPath.item].episode)
+
+        navigationController?.pushViewController(detailVC, animated: true)
     }
 }

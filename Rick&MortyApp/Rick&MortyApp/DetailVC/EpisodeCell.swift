@@ -1,5 +1,5 @@
 //
-//  EpisodCell.swift
+//  EpisodeCell.swift
 //  Rick&MortyApp
 //
 //  Created by user on 18.08.2023.
@@ -7,12 +7,14 @@
 
 import UIKit
 
-final class EpisodCell: UITableViewCell {
+final class EpisodeCell: UITableViewCell {
 
     struct Model {
-        let name: String
-        let number: String
-        let date: String
+        var name: String
+        var number: String
+        var date: String
+        var urlArray: [String]?
+        
     }
 
     private let nameLabel = UILabel()
@@ -21,7 +23,7 @@ final class EpisodCell: UITableViewCell {
     private let backView = UIView()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: .default, reuseIdentifier: "episodCell")
+        super.init(style: .default, reuseIdentifier: "episodeCell")
         configCell()
     }
 
@@ -29,7 +31,7 @@ final class EpisodCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    public func fillCell(model: EpisodCell.Model) {
+    public func fillCell(model: EpisodeCell.Model) {
         nameLabel.text = model.name
         numberLabel.text = model.number
         dateLabel.text = model.date
@@ -50,8 +52,8 @@ final class EpisodCell: UITableViewCell {
         NSLayoutConstraint.activate([
             backView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
             backView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
-            backView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
-            backView.rightAnchor.constraint(equalTo: contentView.rightAnchor)
+            backView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 24),
+            backView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -24)
         ])
 
         numberLabel.translatesAutoresizingMaskIntoConstraints = false
