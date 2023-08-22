@@ -7,39 +7,42 @@
 
 import UIKit
 
+protocol CharacterListPresenterOutput: UIViewController {
+    func updateTableView(with data: [CharacterCell.Model])
+}
+
 class CharacterListVC: UIViewController {
+
+    var presenter: CharacterListPresenterProtocol?
 
     private var collectionView: UICollectionView?
     private lazy var titleLabel = UILabel()
-    var dataSource = [CharacterCell.Model]()
-    override var preferredStatusBarStyle: UIStatusBarStyle { .lightContent }
-    private var netQuest = NetworkService()
+    private var activityView: UIActivityIndicatorView?
+
+    private var dataSource = [CharacterCell.Model]()
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        netQuest.getUrlList {[weak self] urlListData in
-            self?.netQuest.getCharacterList(urlString: urlListData?.characters ?? "nil")
-            {[weak self] resChar in
-                if resChar?.results != nil, let persons = resChar?.results {
-                    self?.dataSource = persons.map {
-                        CharacterCell.Model(title: $0.name ?? "None", image: $0.image, id: $0.id ?? 0,
-                                            episode: $0.episode, status: $0.status ?? "None",
-                                            species: $0.species ?? "None", typeCreated: $0.typeCreated ?? "None",
-                                            gender: $0.gender ?? "None", namePlanet: $0.origin.name ?? "None",
-                                            urlLocation: $0.origin.url ?? "None")
-                    }
-                    DispatchQueue.main.async {
-                        self?.collectionView?.reloadData()
-                    }
-                }
-            }
-        }
-
+        showActivityIndicator()
+        presenter?.getData()
     }
 
+    private func showActivityIndicator() {
+        activityView = UIActivityIndicatorView(style: .large)
+        activityView?.center = self.view.center
+        guard let activityView = activityView else { return }
+        self.view.addSubview(activityView)
+        activityView.startAnimating()
+    }
 
-
+    private func hideActivityIndicator() {
+        if (activityView != nil) {
+            activityView?.stopAnimating()
+            activityView = nil
+        }
+    }
 
     private func setupView() {
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
@@ -78,11 +81,8 @@ class CharacterListVC: UIViewController {
             collectionView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 12),
             collectionView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: -12),
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-
         ])
-
     }
-
 
 }
 
@@ -92,7 +92,6 @@ extension CharacterListVC: UICollectionViewDataSource {
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
         guard let charCell = collectionView.dequeueReusableCell(withReuseIdentifier: "characterCell",
                                                                 for: indexPath) as? CharacterCell
         else { return UICollectionViewCell() }
@@ -103,19 +102,16 @@ extension CharacterListVC: UICollectionViewDataSource {
 
 extension CharacterListVC: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        let detailVC = DetailVC()
-        detailVC.fillInfoCellDataSource(species: dataSource[indexPath.item].species,
-                                        type: dataSource[indexPath.item].typeCreated,
-                                        gender: dataSource[indexPath.item].gender)
-        detailVC.fillDataSourceOrigin(namePlanet: dataSource[indexPath.item].namePlanet,
-                                      avatarImage: nil, bodyType: dataSource[indexPath.item].urlLocation,
-                                      urlPlanet: dataSource[indexPath.item].urlLocation)
-        detailVC.fillAvatarDataSource(nameCharacter: dataSource[indexPath.item].title,
-                                      avatarImage: dataSource[indexPath.item].image,
-                                      rip: dataSource[indexPath.item].status ?? "None")
-        detailVC.fillEpisodeDataSource(urlArray: dataSource[indexPath.item].episode)
+        presenter?.didSelectCell(at: indexPath.item)
+    }
+}
 
-        navigationController?.pushViewController(detailVC, animated: true)
+extension CharacterListVC: CharacterListPresenterOutput {
+    func updateTableView(with data: [CharacterCell.Model]) {
+        dataSource = data
+        DispatchQueue.main.async {
+            self.hideActivityIndicator()
+            self.collectionView?.reloadData()
+        }
     }
 }

@@ -22,6 +22,7 @@
 		CEE8CF4D2A92414300487FBD /* NetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE8CF4C2A92414300487FBD /* NetworkService.swift */; };
 		CEE8CF502A92766200487FBD /* DownloadImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE8CF4F2A92766200487FBD /* DownloadImage.swift */; };
 		CEE8CF522A93D3E500487FBD /* EpisodeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE8CF512A93D3E500487FBD /* EpisodeProvider.swift */; };
+		CEE8CF542A94312500487FBD /* DetailVCPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEE8CF532A94312500487FBD /* DetailVCPresenter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,7 @@
 		CEE8CF4C2A92414300487FBD /* NetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkService.swift; sourceTree = "<group>"; };
 		CEE8CF4F2A92766200487FBD /* DownloadImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadImage.swift; sourceTree = "<group>"; };
 		CEE8CF512A93D3E500487FBD /* EpisodeProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeProvider.swift; sourceTree = "<group>"; };
+		CEE8CF532A94312500487FBD /* DetailVCPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailVCPresenter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +106,7 @@
 				CEE8CF462A8FA50100487FBD /* InfoCell.swift */,
 				CEE8CF482A8FA51100487FBD /* EpisodeCell.swift */,
 				CEE8CF4A2A8FA52800487FBD /* OriginCell.swift */,
+				CEE8CF532A94312500487FBD /* DetailVCPresenter.swift */,
 			);
 			path = DetailVC;
 			sourceTree = "<group>";
@@ -198,6 +201,7 @@
 				CEE8CF452A8FA4F200487FBD /* AvatarCell.swift in Sources */,
 				CEE8CF292A8D6A2900487FBD /* AppDelegate.swift in Sources */,
 				CEE8CF2B2A8D6A2900487FBD /* SceneDelegate.swift in Sources */,
+				CEE8CF542A94312500487FBD /* DetailVCPresenter.swift in Sources */,
 				CEE8CF472A8FA50100487FBD /* InfoCell.swift in Sources */,
 				CEE8CF422A8F7ED200487FBD /* CharacterListPresenter.swift in Sources */,
 				CEE8CF3D2A8F6AFD00487FBD /* CharacterCell.swift in Sources */,

@@ -13,8 +13,6 @@ final class EpisodeCell: UITableViewCell {
         var name: String
         var number: String
         var date: String
-        var urlArray: [String]?
-        
     }
 
     private let nameLabel = UILabel()
@@ -65,7 +63,7 @@ final class EpisodeCell: UITableViewCell {
         ])
 
         numberLabel.textColor = UIColor(red: 0.28, green: 0.77, blue: 0.04, alpha: 1)
-        numberLabel.font = .systemFont(ofSize: 13, weight: .regular)
+        numberLabel.font = .systemFont(ofSize: 13, weight: .medium)
 
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
 
@@ -76,7 +74,7 @@ final class EpisodeCell: UITableViewCell {
         ])
 
         nameLabel.textColor = .white
-        nameLabel.font = .systemFont(ofSize: 17, weight: .medium)
+        nameLabel.font = .systemFont(ofSize: 17, weight: .semibold)
 
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
 
@@ -86,8 +84,6 @@ final class EpisodeCell: UITableViewCell {
         ])
 
         dateLabel.textColor = UIColor(red: 0.58, green: 0.6, blue: 0.61, alpha: 1)
-        dateLabel.font = .systemFont(ofSize: 12, weight: .regular)
-
-
+        dateLabel.font = .systemFont(ofSize: 12, weight: .medium)
     }
 }

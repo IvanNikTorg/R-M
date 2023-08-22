@@ -24,6 +24,7 @@ final class CharacterCell: UICollectionViewCell {
 
     private let label = UILabel()
     private let imageView = UIImageView()
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         configCell()
@@ -33,7 +34,7 @@ final class CharacterCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    public func fillCell(model: CharacterCell.Model) {
+    func fillCell(model: CharacterCell.Model) {
         label.text = model.title
         guard let imageString = model.image, let url = URL(string: imageString) else { return }
         imageView.load(url: url)
@@ -42,7 +43,6 @@ final class CharacterCell: UICollectionViewCell {
     private func configCell() {
         contentView.addSubview(label)
         contentView.addSubview(imageView)
-
 
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.layer.cornerRadius = 10

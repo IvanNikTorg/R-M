@@ -7,20 +7,17 @@
 
 final class EpisodeProvider {
 
-    var dataEpisodes = [episodeDetail]()
-    var dataWithCharacter = [episodeDetail]()
+    var dataEpisodes = [EpisodeDetail]()
+    var dataWithCharacter = [EpisodeDetail]()
 
-    func getSeriesInNetwork(netQuest: NetworkService, completion: @escaping ([episodeDetail]) -> () ) {
-        netQuest.getUrlList { [weak self] urlListData in
-            netQuest.getEpisodesDetail(urlString: urlListData?.episodes ?? "nil")
-            { [weak self] resEpisode in
+    func getSeriesInNetwork(completion: @escaping ([EpisodeDetail]) -> () ) {
+        NetworkService.shared.getEpisodesDetail { [weak self] resEpisode in
                 guard let self = self else { return }
                 if resEpisode?.results != nil, let episodes = resEpisode?.results {
                     self.dataEpisodes = episodes
                     completion(self.dataEpisodes)
                 }
             }
-        }
 
     }
 

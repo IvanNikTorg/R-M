@@ -13,7 +13,6 @@ final class OriginCell: UITableViewCell {
         var namePlanet: String?
         var avatarImage: String?
         var bodyType: String?
-        var urlPlanet: String?
     }
 
     private let namePlanet = UILabel()
@@ -30,14 +29,10 @@ final class OriginCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    public func fillCell(model: OriginCell.Model) {
-        namePlanet.text = model.namePlanet
-        bodyType.text = model.bodyType
+    public func fillCell(model: OriginCell.Model?) {
+        namePlanet.text = model?.namePlanet ?? "None"
+        bodyType.text = model?.bodyType ?? "None"
         avatarImage.image = UIImage(named: "planet_icon")
-
-//        guard let imageString = model.avatarImage, let url = URL(string: imageString) else { return }
-//        imageView?.load(url: url)   // to do check
-
     }
 
     private func configCell() {
@@ -84,7 +79,7 @@ final class OriginCell: UITableViewCell {
         ])
 
         namePlanet.textColor = .white
-        namePlanet.font = .systemFont(ofSize: 17, weight: .medium)
+        namePlanet.font = .systemFont(ofSize: 17, weight: .semibold)
 
         bodyType.translatesAutoresizingMaskIntoConstraints = false
 
@@ -95,9 +90,7 @@ final class OriginCell: UITableViewCell {
         ])
 
         bodyType.textColor = UIColor(red: 0.28, green: 0.77, blue: 0.04, alpha: 1)
-        bodyType.font = .systemFont(ofSize: 13, weight: .regular)
-
-
+        bodyType.font = .systemFont(ofSize: 13, weight: .medium)
     }
 }
 

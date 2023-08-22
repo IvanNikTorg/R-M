@@ -7,8 +7,6 @@
 
 import Foundation
 
-//{"characters":"https://rickandmortyapi.com/api/character","locations":"https://rickandmortyapi.com/api/location","episodes":"https://rickandmortyapi.com/api/episode"}
-
 struct UrlList: Codable {
     let characters: String?
     let locations: String?
@@ -42,25 +40,18 @@ struct OriginStruct: Codable {
     let url: String?
 }
 
-struct resultId: Codable {
+struct ResultId: Codable {
     let namePlanet: String?
     let type: String?
     let dimention: String?
     let created: String?
 }
 
-struct location: Codable {
-    let id: Int
-    let name: String?
-    let type: String?
-    let dimension: String?
+struct EpisodeRM: Codable {
+    let results: [EpisodeDetail]?
 }
 
-struct episodeRM: Codable {
-    let results: [episodeDetail]?
-}
-
-struct episodeDetail: Codable {
+struct EpisodeDetail: Codable {
     let id: Int
     let name: String
     let air_date: String
@@ -68,11 +59,13 @@ struct episodeDetail: Codable {
 }
 
 class NetworkService {
+
+    static let shared = NetworkService()
+    private init() {}
     
     private let startUrl = "https://rickandmortyapi.com/api"
     
-    func getUrlList( completion: @escaping (UrlList?) -> () ) {
-        
+    private func getUrlList(completion: @escaping (UrlList?) -> () ) {
         guard let url = URL(string: startUrl) else {
             completion(nil)
             return
@@ -90,36 +83,31 @@ class NetworkService {
                 print(error)
             }
         }.resume()
-        
     }
 
-
-    func getCharacterList(urlString: String, completion: @escaping (resultCharacters?) -> () ) {
-
-        guard let url = URL(string: urlString) else {
-            completion(nil)
-            return
-
-        }
-
-        URLSession.shared.dataTask(with: url) { (data, response, error) in
-            guard let data = data, error == nil else {
+    func getCharacterList(completion: @escaping (resultCharacters?) -> () ) {
+        getUrlList { urlList  in
+            guard let urlString = urlList?.characters, let url = URL(string: urlString) else {
                 completion(nil)
                 return
             }
-            do {
-                let urlList = try JSONDecoder().decode(resultCharacters.self, from: data)
-                completion(urlList)
-            } catch let error {
-                print(error)
-            }
 
-        }.resume()
-
+            URLSession.shared.dataTask(with: url) { (data, response, error) in
+                guard let data = data, error == nil else {
+                    completion(nil)
+                    return
+                }
+                do {
+                    let urlList = try JSONDecoder().decode(resultCharacters.self, from: data)
+                    completion(urlList)
+                } catch let error {
+                    print(error)
+                }
+            }.resume()
+        }
     }
 
-    func getDataFromDetail(urlString: String, id: Int, completion: @escaping (resultId?) -> () ) {
-
+    func getDataFromDetail(urlString: String, completion: @escaping (ResultId?) -> () ) {
         guard let url = URL(string: urlString) else {
             completion(nil)
             return
@@ -131,7 +119,7 @@ class NetworkService {
                 return
             }
             do {
-                let urlList = try JSONDecoder().decode(resultId.self, from: data)
+                let urlList = try JSONDecoder().decode(ResultId.self, from: data)
                 completion(urlList)
             } catch let error {
                 print(error)
@@ -139,30 +127,25 @@ class NetworkService {
         }.resume()
     }
 
-
-
-    func getEpisodesDetail(urlString: String, completion: @escaping (episodeRM?) -> () ) {
-
-        guard let url = URL(string: urlString) else {
-            completion(nil)
-            return
-
-        }
-
-        URLSession.shared.dataTask(with: url) { (data, response, error) in
-            guard let data = data, error == nil else {
+    func getEpisodesDetail(completion: @escaping (EpisodeRM?) -> ()) {
+        getUrlList { urlList  in
+            guard let urlString = urlList?.episodes, let url = URL(string: urlString) else {
                 completion(nil)
                 return
             }
-            do {
-                let urlList = try JSONDecoder().decode(episodeRM.self, from: data)
-                completion(urlList)
-            } catch let error {
-                print(error)
-            }
-
-        }.resume()
-
+            
+            URLSession.shared.dataTask(with: url) { (data, response, error) in
+                guard let data = data, error == nil else {
+                    completion(nil)
+                    return
+                }
+                do {
+                    let urlList = try JSONDecoder().decode(EpisodeRM.self, from: data)
+                    completion(urlList)
+                } catch let error {
+                    print(error)
+                }
+            }.resume()
+        }
     }
-
 }

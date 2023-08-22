@@ -33,7 +33,8 @@ final class InfoCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    public func fillCell(model: InfoCell.Model) {
+    func fillCell(model: InfoCell.Model?) {
+        guard let model = model else { return }
         speciesRow.fill(title: model.speciesTitle, value: model.species)
         typeRow.fill(title: model.typeTitle, value: model.type)
         genderRow.fill(title: model.genderTitle, value: model.gender)
@@ -98,10 +99,10 @@ private class InfoRow: UIView {
 
     private func config() {
         title.textColor = UIColor(red: 0.77, green: 0.79, blue: 0.89, alpha: 1)
-        title.font = .systemFont(ofSize: 16, weight: .regular)
+        title.font = .systemFont(ofSize: 16, weight: .medium)
         title.textAlignment = .left
         value.textColor = .white
-        value.font = .systemFont(ofSize: 16, weight: .regular)
+        value.font = .systemFont(ofSize: 16, weight: .medium)
         value.textAlignment = .right
 
         self.addSubview(title)
@@ -122,6 +123,5 @@ private class InfoRow: UIView {
             value.bottomAnchor.constraint(equalTo: self.bottomAnchor),
             value.rightAnchor.constraint(equalTo: self.rightAnchor)
         ])
-
     }
 }

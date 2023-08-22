@@ -17,6 +17,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         guard let windowsScene = (scene as? UIWindowScene) else { return }
         let viewCon = CharacterListVC()
+        let presenter = CharacterListPresenter()
+        viewCon.presenter = presenter
+        presenter.output = viewCon
+        
         navController = UINavigationController(rootViewController: viewCon)
         navController.navigationBar.barStyle = .black
         navController.navigationBar.tintColor = .white

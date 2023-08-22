@@ -13,7 +13,6 @@ final class AvatarCell: UITableViewCell {
         var nameCharacter: String
         var avatarImage: String?
         var rip: String
-        var id: Int
     }
 
     private let nameLable = UILabel()
@@ -29,15 +28,14 @@ final class AvatarCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    public func fillCell(model: AvatarCell.Model) {
-        nameLable.text = model.nameCharacter
-        ripLabel.text = model.rip
-        guard let imageString = model.avatarImage, let url = URL(string: imageString) else { return }
+    public func fillCell(model: AvatarCell.Model?) {
+        nameLable.text = model?.nameCharacter ?? "None"
+        ripLabel.text = model?.rip ?? "None"
+        guard let imageString = model?.avatarImage, let url = URL(string: imageString) else { return }
         avatarImage.load(url: url)
     }
 
     private func configCell() {
-
         contentView.addSubview(avatarImage)
         contentView.addSubview(nameLable)
         contentView.addSubview(ripLabel)
@@ -64,7 +62,7 @@ final class AvatarCell: UITableViewCell {
         ])
 
         nameLable.textColor = .white
-        nameLable.font = .systemFont(ofSize: 22, weight: .bold)   //to do check font
+        nameLable.font = .systemFont(ofSize: 22, weight: .bold)
 
         ripLabel.translatesAutoresizingMaskIntoConstraints = false
 
@@ -75,13 +73,6 @@ final class AvatarCell: UITableViewCell {
         ])
 
         ripLabel.textColor = UIColor(red: 0.28, green: 0.77, blue: 0.04, alpha: 1)
-        ripLabel.font = .systemFont(ofSize: 16, weight: .regular)     //to do check font
-
-
+        ripLabel.font = .systemFont(ofSize: 16, weight: .medium)
     }
 }
-
-
-
-
-
